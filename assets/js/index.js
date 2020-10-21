@@ -1,13 +1,14 @@
-var urlItems = "https://br.ongame.net/api/challenge/items/"; //Sua URL
+var urlItems = "https://br.ongame.net/api/challenge/items/";
 var rewardsDiv = document.getElementById('rewardsDiv');
 
 var xhttp = new XMLHttpRequest();
 xhttp.open("GET", urlItems, false);
-xhttp.send(); //A execução do script pára aqui até a requisição retornar do servidor
+xhttp.send();
 
 var items = JSON.parse(xhttp.responseText);
 
 for (var item in items) {
+    let percentage = items[item].percentage;
     let newItems = document.createElement('div');
     newItems.classList.add('item');
     newItems.id = items[item].id;
@@ -18,6 +19,7 @@ for (var item in items) {
 
     let newItemsImage = document.createElement('img');
     newItemsImage.src = items[item].image;
+    newItemsImage.style.width = "100%";
     newItemsImage.alt = 'item picture';
     // INSERT IMAGE IN IMAGE DIV
     newItemImageDiv.appendChild(newItemsImage);
@@ -34,13 +36,24 @@ for (var item in items) {
     newItemName.innerHTML = items[item].name;
     newNameButtonDiv.appendChild(newItemName);
 
-    let newButtonReedem = document.createElement('button');
-    newButtonReedem.innerHTML = 'RESGATAR';
-    newNameButtonDiv.appendChild(newButtonReedem);
+    // BUTTON
+    if (!items[item].redeemed) {
+        let newButtonReedem = document.createElement('button');
+        newButtonReedem.innerHTML = 'RESGATAR';
+        newNameButtonDiv.appendChild(newButtonReedem);
+    } else {
+        let newButtonReedemed = document.createElement('p');
+        newButtonReedemed.innerHTML = "ITEM RESGATADO";
+        newNameButtonDiv.appendChild(newButtonReedemed);
+    }
 
-    let newProgressBar = document.createElement('span');
-    newProgressBar.classList.add('progress-bar');
-    newDescriptionDiv.appendChild(newProgressBar);
+    // PROGRESS BAR 
+    if (!items[item].redeemed) {
+        let newProgressBar = document.createElement('span');
+        newProgressBar.classList.add('progress-bar');
+        newProgressBar.style.width = percentage + "%";
+        newDescriptionDiv.appendChild(newProgressBar);
+    }
 
     rewardsDiv.appendChild(newItems);
     newItems.appendChild(newItemImageDiv);
