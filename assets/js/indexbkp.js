@@ -2,6 +2,7 @@ const getURL = "https://br.ongame.net/api/challenge/items/";
 const postURL = "https://br.ongame.net/api/challenge/item/redeem/";
 var items = [];
 
+var xhttp = new XMLHttpRequest();
 
 function openConfirmModal(id, image, name) {
     let darkBackground = document.getElementById('darkBackground');
@@ -9,9 +10,11 @@ function openConfirmModal(id, image, name) {
 
     let modalDiv = document.getElementById('modal');
     modalDiv.style.display = 'flex';
+
     let modalTitle = document.createElement('h1');
     modalTitle.innerHTML = 'DESEJA RESGATAR?'
     modalDiv.appendChild(modalTitle);
+
     let modalImageItem = document.createElement('img');
     modalImageItem.src = image;
     modalImageItem.id = 'modalImageItem';
@@ -53,39 +56,27 @@ function confirmRedeem(id) {
 
     let modalDiv = document.getElementById('modal');
     let darkBackground = document.getElementById('darkBackground');
+
     let message = {
         item_id: id
     }
 
     const jsonItem = JSON.stringify(message);
-    const xhttp = new XMLHttpRequest();
+
     xhttp.open("POST", postURL, true);
     xhttp.setRequestHeader('Content-Type', 'application/json');
     xhttp.onreadystatechange = () => {
-
-        if (xhttp.readyState === XMLHttpRequest.DONE) {
-            if (xhttp.status !== 200) {
-                document.getElementById('errorModal').style.display = 'block';
-                return;
-            }
-
-            const response = JSON.parse(xhttp.responseText);
-
-            if (!(response && response.success)) {
-                document.getElementById('errorModal').style.display = 'block';
-                return;
-            }
-
-            const item = items.find(x => x.id === id);
-            if (item) {
-                item.redeemed = true;
-                this.buildItems();
-            }
-
+        const itemRedeemed = items.find(x => x.id === id);
+        if (!itemRedeemed) {
+            itemRedeemed.redeemed = true;
+            this.buildItems();
+        } else {
+            document.getElementById('errorModal').style.display = 'block';
         }
     }
 
     xhttp.send(jsonItem);
+
     modalDiv.innerHTML = '';
     modalDiv.style.display = 'none';
     darkBackground.style.display = 'none';
@@ -144,17 +135,17 @@ function buildItems() {
         if (item.redeemed) {
             let doneDiv = document.createElement('div');
             doneDiv.classList.add('redeemed');
-            let newRedeemedButton = document.createElement('p');
+            let newredeemedButton = document.createElement('p');
             let newDoneIcon = document.createElement('img');
             newDoneIcon.style.width = '24px';
 
             newDoneIcon.src = './assets/img/done.svg';
             newDoneIcon.alt = 'done icon';
-            newRedeemedButton.innerHTML = "ITEM RESGATADO";
+            newredeemedButton.innerHTML = "ITEM RESGATADO";
 
             newNameButtonDiv.appendChild(doneDiv);
             doneDiv.appendChild(newDoneIcon);
-            doneDiv.appendChild(newRedeemedButton);
+            doneDiv.appendChild(newredeemedButton);
         } else if (item.percentage < 100) {
             let newRedeemButton = document.createElement('button');
             let newProgressBar = document.createElement('span');
@@ -185,7 +176,6 @@ function buildItems() {
             newProgressBar.classList.add('can-reddem-progress-bar');
             newDescriptionDiv.appendChild(newProgressBar);
 
-
         }
 
         rewardsDiv.appendChild(newItems);
@@ -195,19 +185,14 @@ function buildItems() {
     }
 }
 
-function init() {
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", getURL, true);
-    xhttp.onload = (e) => {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
-            items = JSON.parse(xhttp.responseText);
-            this.buildItems();
-        } else {
-            console.log('error');
-        }
+xhttp.open("GET", getURL, true);
+xhttp.onload = (e) => {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+        items = JSON.parse(xhttp.responseText);
+        this.buildItems();
+    } else {
+        console.log('error');
     }
-
-    xhttp.send();
 }
 
-init();
+xhttp.send();

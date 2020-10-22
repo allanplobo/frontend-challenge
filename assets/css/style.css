@@ -25,13 +25,24 @@ p {
     border: 2px solid black;
     background-color: rgba(0, 0, 0, 0.102);
     width: 50%;
-    max-height: 550px;
+    max-height: 525px;
     min-height: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 24px 0px;
     margin: 24px;
+}
+
+div::-webkit-scrollbar {
+    width: 6px;
+    background-color: transparent;
+}
+
+div::-webkit-scrollbar-thumb {
+    box-shadow: 0 0 0.2em rgb(204, 8, 8);
+    border-radius: 20px;
+    background-color: #ec2c2c;
 }
 
 .content h3 {
@@ -89,7 +100,6 @@ p {
 }
 
 .content .rewards .item .description .name-button button {
-    cursor: pointer;
     outline: none;
     background-color: transparent;
     height: 24px;
