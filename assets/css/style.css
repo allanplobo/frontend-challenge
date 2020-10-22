@@ -115,6 +115,7 @@ div::-webkit-scrollbar-thumb {
 }
 
 .can-reddem-button:hover {
+    transition: 0.5s;
     box-shadow: 0 0 1em red;
 }
 
@@ -123,7 +124,6 @@ div::-webkit-scrollbar-thumb {
     margin-top: 10px;
     height: 30%;
     background-color: #462828;
-    transition: 0.5s width;
 }
 
 .can-reddem-progress-bar {
@@ -136,6 +136,7 @@ div::-webkit-scrollbar-thumb {
     flex-direction: column;
     align-items: center;
     text-align: center;
+    border-radius: 10px;
     width: 265px;
     height: 180px;
     background-color: #313131;
@@ -164,18 +165,24 @@ div::-webkit-scrollbar-thumb {
     padding: 3px 9px;
 }
 
-.modal .modal-buttons-div button:hover {
-    box-shadow: 0 0 0.5em grey;
-}
-
 .modal .modal-buttons-div .confirm-button {
     margin-right: 12px;
     background-color: #ec2c2c;
 }
 
+.modal .modal-buttons-div .confirm-button:hover {
+    transition: 0.5s;
+    box-shadow: 0 0 0.5em red;
+}
+
 .modal .modal-buttons-div .deny-button {
     color: white;
     background-color: #979797;
+}
+
+.modal .modal-buttons-div .deny-button:hover {
+    transition: 0.5s;
+    box-shadow: 0 0 0.5em grey;
 }
 
 .modal .ok-modal-button {
@@ -185,6 +192,7 @@ div::-webkit-scrollbar-thumb {
 }
 
 .modal .ok-modal-button:hover {
+    transition: 0.5s;
     box-shadow: 0 0 0.5em grey;
 }
 
@@ -247,6 +255,9 @@ div::-webkit-scrollbar-thumb {
 /* MOBILE */
 
 @media only screen and (max-width:555px) {
+    p {
+        font-size: 0.7rem;
+    }
     .content {
         width: 94%;
         height: 520px;
@@ -257,5 +268,8 @@ div::-webkit-scrollbar-thumb {
     }
     .content .rewards .item .name-button .item-name {
         width: 55%;
+    }
+    .content .rewards .item .description .progress-bar {
+        height: 11%;
     }
 }
