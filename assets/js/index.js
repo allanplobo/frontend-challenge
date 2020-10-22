@@ -1,4 +1,4 @@
-var urlItems = "https://br.ongame.net/api/challenge/items/";
+const urlItems = "https://br.ongame.net/api/challenge/items/";
 var rewardsDiv = document.getElementById('rewardsDiv');
 
 var xhttp = new XMLHttpRequest();
@@ -36,6 +36,7 @@ xhttp.onload = function(e) {
                 newDescriptionDiv.appendChild(newNameButtonDiv)
 
                 let newItemName = document.createElement('p');
+                newItemName.classList.add('item-name');
                 newItemName.innerHTML = items[item].name;
                 newNameButtonDiv.appendChild(newItemName);
 
