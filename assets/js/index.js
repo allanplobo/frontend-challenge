@@ -5,6 +5,7 @@ var xhttp = new XMLHttpRequest();
 xhttp.open("GET", urlItems, false);
 xhttp.send();
 
+console.log(xhttp.responseText);
 var items = JSON.parse(xhttp.responseText);
 
 for (var item in items) {
@@ -36,23 +37,55 @@ for (var item in items) {
     newItemName.innerHTML = items[item].name;
     newNameButtonDiv.appendChild(newItemName);
 
-    // BUTTON
-    if (!items[item].redeemed) {
-        let newButtonReedem = document.createElement('button');
-        newButtonReedem.innerHTML = 'RESGATAR';
-        newNameButtonDiv.appendChild(newButtonReedem);
+    // BUTTON + PROGRESS BAR
+    if (items[item].percentage < 100 && !items[item].redeemed) {
+        let newReedemButton = document.createElement('button');
+        let newProgressBar = document.createElement('span');
+
+        newReedemButton.innerHTML = 'RESGATAR';
+        newNameButtonDiv.appendChild(newReedemButton);
+
+        newProgressBar.classList.add('progress-bar');
+        newProgressBar.style.width = percentage + "%";
+        newDescriptionDiv.appendChild(newProgressBar);
+
+    } else if (items[item].percentage == 100 && !items[item].redeemed) {
+        let newCanReedemButton = document.createElement('button');
+        let newProgressBar = document.createElement('span');
+
+
+        newCanReedemButton.innerHTML = 'RESGATAR';
+        newCanReedemButton.classList.add('can-reddem-button');
+        newNameButtonDiv.appendChild(newCanReedemButton);
+
+        newProgressBar.classList.add('progress-bar');
+        newProgressBar.style.width = percentage + "%";
+        newProgressBar.classList.add('can-reddem-progress-bar');
+        newDescriptionDiv.appendChild(newProgressBar);
+
+
     } else {
-        let newButtonReedemed = document.createElement('p');
-        newButtonReedemed.innerHTML = "ITEM RESGATADO";
-        newNameButtonDiv.appendChild(newButtonReedemed);
+        let doneDiv = document.createElement('div');
+        doneDiv.style = 'display: flex; align-items: center;'
+        let newReedemedButton = document.createElement('p');
+        let newDoneIcon = document.createElement('img');
+        newDoneIcon.style.width = '24px';
+
+        newDoneIcon.src = './assets/img/done.svg';
+        newDoneIcon.alt = 'done icon';
+        newReedemedButton.innerHTML = "ITEM RESGATADO";
+
+        newNameButtonDiv.appendChild(doneDiv);
+        doneDiv.appendChild(newDoneIcon);
+        doneDiv.appendChild(newReedemedButton);
     }
 
     // PROGRESS BAR 
     if (!items[item].redeemed) {
-        let newProgressBar = document.createElement('span');
-        newProgressBar.classList.add('progress-bar');
-        newProgressBar.style.width = percentage + "%";
-        newDescriptionDiv.appendChild(newProgressBar);
+
+    }
+    if (items[item].percentage == 100 && !items[item].redeemed) {
+
     }
 
     rewardsDiv.appendChild(newItems);
