@@ -34,13 +34,13 @@ p {
     margin: 24px;
 }
 
-.content .logo {
-    width: 200px;
-}
-
 .content h3 {
     color: white;
     text-shadow: 0 0 0.1em red;
+}
+
+.content .logo {
+    width: 200px;
 }
 
 .content .rewards {
@@ -66,16 +66,7 @@ p {
     justify-content: center;
 }
 
-.content .rewards .item .description {
-    width: 100%;
-    height: 44px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: white;
-}
-
-.content .rewards .item .name-button .reedemed {
+.content .rewards .item .name-button .redeemed {
     display: flex;
     align-items: center;
     text-align: center;
@@ -88,7 +79,17 @@ p {
     justify-content: space-between;
 }
 
+.content .rewards .item .description {
+    width: 100%;
+    height: 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
 .content .rewards .item .description .name-button button {
+    cursor: pointer;
     outline: none;
     background-color: transparent;
     height: 24px;
@@ -240,7 +241,7 @@ p {
         width: 94%;
         height: 520px;
     }
-    .content .rewards .item .name-button .reedemed {
+    .content .rewards .item .name-button .redeemed {
         width: 90px;
         flex-direction: column;
     }

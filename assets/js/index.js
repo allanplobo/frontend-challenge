@@ -1,5 +1,7 @@
 const getURL = "https://br.ongame.net/api/challenge/items/";
 const postURL = "https://br.ongame.net/api/challenge/item/redeem/";
+var items = [];
+
 var xhttp = new XMLHttpRequest();
 
 function openConfirmModal(id, image, name) {
@@ -8,6 +10,10 @@ function openConfirmModal(id, image, name) {
 
     let modalDiv = document.getElementById('modal');
     modalDiv.style.display = 'flex';
+
+    let modalTitle = document.createElement('h1');
+    modalTitle.innerHTML = 'DESEJA RESGATAR?'
+    modalDiv.appendChild(modalTitle);
 
     let modalImageItem = document.createElement('img');
     modalImageItem.src = image;
@@ -27,7 +33,7 @@ function openConfirmModal(id, image, name) {
     let modalConfirmButton = document.createElement('button');
     modalConfirmButton.id = 'confirmButton';
     modalConfirmButton.addEventListener("click", () => {
-        confirmReedem(id);
+        confirmRedeem(parseInt(id));
     }, false);
     modalConfirmButton.classList.add('confirm-button');
     modalConfirmButton.id = 'modalConfirmButton';
@@ -37,7 +43,7 @@ function openConfirmModal(id, image, name) {
     let modalDenyButton = document.createElement('button');
     modalDenyButton.id = 'denyButton';
     modalDenyButton.addEventListener("click", () => {
-        denyReedem();
+        denyRedeem();
     }, false);
     modalDenyButton.classList.add('deny-button');
     modalDenyButton.id = 'modalDenyButton';
@@ -46,151 +52,144 @@ function openConfirmModal(id, image, name) {
 
 }
 
-function confirmReedem(id) {
-    // let message = {
-    //     "item_id": id
-    // }
-
-    // const jsonItem = JSON.stringify(message);
-
-    // console.log(jsonItem);
-
-    // xhttp.open("POST", postURL, true);
-    // xhttp.setRequestHeader('Content-Type', 'application/json');
-    // xhttp.onreadystatechange = () => {
-    //     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-    //         console.log('recebeu');
-    //     } else {
-    //         console.log('error');
-    //     }
-    // }
-
-    // xhttp.send(jsonItem);
-
-
-
-
-}
-
-function denyReedem() {
-    document.getElementById('errorModal').style.display = 'block';
+function confirmRedeem(id) {
 
     let modalDiv = document.getElementById('modal');
     let darkBackground = document.getElementById('darkBackground');
 
-    let modalImageItem = document.getElementById('modalImageItem');
-    let modalButtonsDiv = document.getElementById('modalButtonsDiv');
-    let modalNameItem = document.getElementById('modalNameItem');
+    let message = {
+        item_id: id
+    }
+
+    const jsonItem = JSON.stringify(message);
+
+    xhttp.open("POST", postURL, true);
+    xhttp.setRequestHeader('Content-Type', 'application/json');
+    xhttp.onreadystatechange = () => {
+        const itemRedeemed = items.find(x => x.id === id);
+        if (!itemRedeemed) {
+            itemRedeemed.redeemed = true;
+            this.buildItems();
+        } else {
+            document.getElementById('errorModal').style.display = 'block';
+        }
+    }
+
+    xhttp.send(jsonItem);
+
+    modalDiv.innerHTML = '';
+    modalDiv.style.display = 'none';
+    darkBackground.style.display = 'none';
+}
+
+function denyRedeem() {
+    let modalDiv = document.getElementById('modal');
+    let darkBackground = document.getElementById('darkBackground');
 
     darkBackground.style.display = 'none';
+    modalDiv.innerHTML = '';
     modalDiv.style.display = 'none';
-    modalButtonsDiv.remove();
-    modalImageItem.remove();
-    modalNameItem.remove();
+
 }
 
 function confirmError() {
     let errorModal = document.getElementById('errorModal');
-
     errorModal.style.display = 'none';
-
 }
 
+function buildItems() {
+    let rewardsDiv = document.getElementById('rewardsDiv');
+    rewardsDiv.innerHTML = '';
 
-xhttp.open("GET", getURL, true);
-xhttp.onload = (e) => {
+    for (let item of items) {
+        let percentage = item.percentage;
+        let newItems = document.createElement('div');
+        newItems.classList.add('item');
+        newItems.id = item.id;
 
-    if (xhttp.readyState === 4 && xhttp.status === 200) {
+        // DIV IMAGE + Childs
+        let newItemImageDiv = document.createElement('div');
+        newItemImageDiv.classList.add('image');
 
-        var items = JSON.parse(xhttp.responseText);
-        let rewardsDiv = document.getElementById('rewardsDiv');
+        let newItemsImage = document.createElement('img');
+        newItemsImage.src = item.image;
+        newItemsImage.style.width = "100%";
+        newItemsImage.alt = 'item picture';
+        // INSERT IMAGE IN IMAGE DIV
+        newItemImageDiv.appendChild(newItemsImage);
 
+        // DIV DESCRIPTION + Childs
+        let newDescriptionDiv = document.createElement('div');
+        newDescriptionDiv.classList.add('description');
 
-        for (var item in items) {
-            let percentage = items[item].percentage;
-            let newItems = document.createElement('div');
-            newItems.classList.add('item');
-            newItems.id = items[item].id;
+        // SUPERIOR DIV OF DESCRIPTION
+        let newNameButtonDiv = document.createElement('div');
+        newNameButtonDiv.classList.add('name-button');
+        newDescriptionDiv.appendChild(newNameButtonDiv)
 
-            // DIV IMAGE + Childs
-            let newItemImageDiv = document.createElement('div');
-            newItemImageDiv.classList.add('image');
+        let newItemName = document.createElement('p');
+        newItemName.classList.add('item-name');
+        newItemName.innerHTML = item.name;
+        newNameButtonDiv.appendChild(newItemName);
 
-            let newItemsImage = document.createElement('img');
-            newItemsImage.src = items[item].image;
-            newItemsImage.style.width = "100%";
-            newItemsImage.alt = 'item picture';
-            // INSERT IMAGE IN IMAGE DIV
-            newItemImageDiv.appendChild(newItemsImage);
+        if (item.redeemed) {
+            let doneDiv = document.createElement('div');
+            doneDiv.classList.add('redeemed');
+            let newredeemedButton = document.createElement('p');
+            let newDoneIcon = document.createElement('img');
+            newDoneIcon.style.width = '24px';
 
-            // DIV DESCRIPTION + Childs
-            let newDescriptionDiv = document.createElement('div');
-            newDescriptionDiv.classList.add('description');
+            newDoneIcon.src = './assets/img/done.svg';
+            newDoneIcon.alt = 'done icon';
+            newredeemedButton.innerHTML = "ITEM RESGATADO";
 
-            // SUPERIOR DIV OF DESCRIPTION
-            let newNameButtonDiv = document.createElement('div');
-            newNameButtonDiv.classList.add('name-button');
-            newDescriptionDiv.appendChild(newNameButtonDiv)
+            newNameButtonDiv.appendChild(doneDiv);
+            doneDiv.appendChild(newDoneIcon);
+            doneDiv.appendChild(newredeemedButton);
+        } else if (item.percentage < 100) {
+            let newRedeemButton = document.createElement('button');
+            let newProgressBar = document.createElement('span');
 
-            let newItemName = document.createElement('p');
-            newItemName.classList.add('item-name');
-            newItemName.innerHTML = items[item].name;
-            newNameButtonDiv.appendChild(newItemName);
+            newRedeemButton.innerHTML = 'RESGATAR';
+            newRedeemButton.id = 'resgatarButton';
+            newNameButtonDiv.appendChild(newRedeemButton);
 
-            // BUTTON + PROGRESS BAR
-            if (items[item].percentage < 100 && !items[item].redeemed) {
-                let newReedemButton = document.createElement('button');
-                let newProgressBar = document.createElement('span');
+            newProgressBar.classList.add('progress-bar');
+            newProgressBar.style.width = percentage + "%";
+            newDescriptionDiv.appendChild(newProgressBar);
 
-                newReedemButton.innerHTML = 'RESGATAR';
-                newReedemButton.id = 'resgatarButton';
-                newNameButtonDiv.appendChild(newReedemButton);
-
-                newProgressBar.classList.add('progress-bar');
-                newProgressBar.style.width = percentage + "%";
-                newDescriptionDiv.appendChild(newProgressBar);
-
-            } else if (items[item].percentage == 100 && !items[item].redeemed) {
-                let newCanReedemButton = document.createElement('button');
-                let newProgressBar = document.createElement('span');
-
-
-                newCanReedemButton.innerHTML = 'RESGATAR';
-                newCanReedemButton.classList.add('can-reddem-button');
-                newCanReedemButton.onclick = 'openConfirmModal()';
-                newCanReedemButton.addEventListener("click", () => {
-                    openConfirmModal(newItems.id, newItemsImage.src, newItemName.innerHTML)
-                }, false);
-                newNameButtonDiv.appendChild(newCanReedemButton);
-
-                newProgressBar.classList.add('progress-bar');
-                newProgressBar.style.width = percentage + "%";
-                newProgressBar.classList.add('can-reddem-progress-bar');
-                newDescriptionDiv.appendChild(newProgressBar);
+        } else {
+            let newCanRedeemButton = document.createElement('button');
+            let newProgressBar = document.createElement('span');
 
 
-            } else {
-                let doneDiv = document.createElement('div');
-                doneDiv.classList.add('reedemed');
-                let newReedemedButton = document.createElement('p');
-                let newDoneIcon = document.createElement('img');
-                newDoneIcon.style.width = '24px';
+            newCanRedeemButton.innerHTML = 'RESGATAR';
+            newCanRedeemButton.classList.add('can-reddem-button');
+            newCanRedeemButton.onclick = 'openConfirmModal()';
+            newCanRedeemButton.addEventListener("click", () => {
+                openConfirmModal(newItems.id, newItemsImage.src, newItemName.innerHTML)
+            }, false);
+            newNameButtonDiv.appendChild(newCanRedeemButton);
 
-                newDoneIcon.src = './assets/img/done.svg';
-                newDoneIcon.alt = 'done icon';
-                newReedemedButton.innerHTML = "ITEM RESGATADO";
-
-                newNameButtonDiv.appendChild(doneDiv);
-                doneDiv.appendChild(newDoneIcon);
-                doneDiv.appendChild(newReedemedButton);
-            }
-
-            rewardsDiv.appendChild(newItems);
-            newItems.appendChild(newItemImageDiv);
-            newItems.appendChild(newDescriptionDiv);
+            newProgressBar.classList.add('progress-bar');
+            newProgressBar.style.width = percentage + "%";
+            newProgressBar.classList.add('can-reddem-progress-bar');
+            newDescriptionDiv.appendChild(newProgressBar);
 
         }
 
+        rewardsDiv.appendChild(newItems);
+        newItems.appendChild(newItemImageDiv);
+        newItems.appendChild(newDescriptionDiv);
+
+    }
+}
+
+xhttp.open("GET", getURL, true);
+xhttp.onload = (e) => {
+    if (xhttp.readyState === 4 && xhttp.status === 200) {
+        items = JSON.parse(xhttp.responseText);
+        this.buildItems();
     } else {
         console.log('error');
     }
