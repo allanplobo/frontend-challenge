@@ -1,4 +1,6 @@
-const urlItems = "https://br.ongame.net/api/challenge/items/";
+const getURL = "https://br.ongame.net/api/challenge/items/";
+const postURL = "https://br.ongame.net/api/challenge/item/redeem/";
+var xhttp = new XMLHttpRequest();
 
 function openConfirmModal(id, image, name) {
     let darkBackground = document.getElementById('darkBackground');
@@ -6,7 +8,6 @@ function openConfirmModal(id, image, name) {
 
     let modalDiv = document.getElementById('modal');
     modalDiv.style.display = 'flex';
-
 
     let modalImageItem = document.createElement('img');
     modalImageItem.src = image;
@@ -25,6 +26,9 @@ function openConfirmModal(id, image, name) {
 
     let modalConfirmButton = document.createElement('button');
     modalConfirmButton.id = 'confirmButton';
+    modalConfirmButton.addEventListener("click", () => {
+        confirmReedem(id);
+    }, false);
     modalConfirmButton.classList.add('confirm-button');
     modalConfirmButton.id = 'modalConfirmButton';
     modalConfirmButton.innerHTML = 'SIM';
@@ -40,12 +44,37 @@ function openConfirmModal(id, image, name) {
     modalDenyButton.innerHTML = 'NÃO';
     modalButtonsDiv.appendChild(modalDenyButton);
 
+}
+
+function confirmReedem(id) {
+    // let message = {
+    //     "item_id": id
+    // }
+
+    // const jsonItem = JSON.stringify(message);
+
+    // console.log(jsonItem);
+
+    // xhttp.open("POST", postURL, true);
+    // xhttp.setRequestHeader('Content-Type', 'application/json');
+    // xhttp.onreadystatechange = () => {
+    //     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+    //         console.log('recebeu');
+    //     } else {
+    //         console.log('error');
+    //     }
+    // }
+
+    // xhttp.send(jsonItem);
 
 
-    console.log(id, image, name);
+
+
 }
 
 function denyReedem() {
+    document.getElementById('errorModal').style.display = 'block';
+
     let modalDiv = document.getElementById('modal');
     let darkBackground = document.getElementById('darkBackground');
 
@@ -60,10 +89,15 @@ function denyReedem() {
     modalNameItem.remove();
 }
 
-var xhttp = new XMLHttpRequest();
+function confirmError() {
+    let errorModal = document.getElementById('errorModal');
 
-xhttp.open("GET", urlItems, true);
+    errorModal.style.display = 'none';
 
+}
+
+
+xhttp.open("GET", getURL, true);
 xhttp.onload = (e) => {
 
     if (xhttp.readyState === 4 && xhttp.status === 200) {
@@ -109,6 +143,7 @@ xhttp.onload = (e) => {
                 let newProgressBar = document.createElement('span');
 
                 newReedemButton.innerHTML = 'RESGATAR';
+                newReedemButton.id = 'resgatarButton';
                 newNameButtonDiv.appendChild(newReedemButton);
 
                 newProgressBar.classList.add('progress-bar');
@@ -150,23 +185,15 @@ xhttp.onload = (e) => {
                 doneDiv.appendChild(newReedemedButton);
             }
 
-            // PROGRESS BAR 
-            if (!items[item].redeemed) {
-
-            }
-            if (items[item].percentage == 100 && !items[item].redeemed) {
-
-            }
-
             rewardsDiv.appendChild(newItems);
             newItems.appendChild(newItemImageDiv);
             newItems.appendChild(newDescriptionDiv);
 
         }
 
-        // console.log(items);
     } else {
-        console.log('erroy');
+        console.log('error');
     }
 }
+
 xhttp.send();

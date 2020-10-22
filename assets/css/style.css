@@ -167,6 +167,16 @@ p {
     background-color: #979797;
 }
 
+.modal .ok-modal-button {
+    width: 50px;
+    height: 30px;
+    cursor: pointer;
+}
+
+.modal .ok-modal-button:hover {
+    box-shadow: 0 0 0.5em grey;
+}
+
 .dark-background {
     z-index: 1;
     content: '';
