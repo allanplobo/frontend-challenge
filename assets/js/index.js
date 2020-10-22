@@ -7,31 +7,57 @@ function openConfirmModal(id, image, name) {
     let modalDiv = document.getElementById('modal');
     modalDiv.style.display = 'flex';
 
+
     let modalImageItem = document.createElement('img');
     modalImageItem.src = image;
+    modalImageItem.id = 'modalImageItem';
     modalDiv.appendChild(modalImageItem);
 
     let modalNameItem = document.createElement('p');
     modalNameItem.innerHTML = name;
+    modalNameItem.id = 'modalNameItem';
     modalDiv.appendChild(modalNameItem);
 
     let modalButtonsDiv = document.createElement('div');
     modalButtonsDiv.classList.add('modal-buttons-div');
+    modalButtonsDiv.id = 'modalButtonsDiv';
     modalDiv.appendChild(modalButtonsDiv);
 
     let modalConfirmButton = document.createElement('button');
     modalConfirmButton.id = 'confirmButton';
     modalConfirmButton.classList.add('confirm-button');
+    modalConfirmButton.id = 'modalConfirmButton';
     modalConfirmButton.innerHTML = 'SIM';
     modalButtonsDiv.appendChild(modalConfirmButton);
 
     let modalDenyButton = document.createElement('button');
     modalDenyButton.id = 'denyButton';
+    modalDenyButton.addEventListener("click", () => {
+        denyReedem();
+    }, false);
     modalDenyButton.classList.add('deny-button');
+    modalDenyButton.id = 'modalDenyButton';
     modalDenyButton.innerHTML = 'NÃO';
     modalButtonsDiv.appendChild(modalDenyButton);
 
+
+
     console.log(id, image, name);
+}
+
+function denyReedem() {
+    let modalDiv = document.getElementById('modal');
+    let darkBackground = document.getElementById('darkBackground');
+
+    let modalImageItem = document.getElementById('modalImageItem');
+    let modalButtonsDiv = document.getElementById('modalButtonsDiv');
+    let modalNameItem = document.getElementById('modalNameItem');
+
+    darkBackground.style.display = 'none';
+    modalDiv.style.display = 'none';
+    modalButtonsDiv.remove();
+    modalImageItem.remove();
+    modalNameItem.remove();
 }
 
 var xhttp = new XMLHttpRequest();
@@ -110,7 +136,7 @@ xhttp.onload = (e) => {
 
             } else {
                 let doneDiv = document.createElement('div');
-                doneDiv.style = 'display: flex; align-items: center;'
+                doneDiv.classList.add('reedemed');
                 let newReedemedButton = document.createElement('p');
                 let newDoneIcon = document.createElement('img');
                 newDoneIcon.style.width = '24px';
