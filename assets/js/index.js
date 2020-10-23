@@ -1,6 +1,9 @@
 const getURL = "https://br.ongame.net/api/challenge/items/";
 const postURL = "https://br.ongame.net/api/challenge/item/redeem/";
+
+var isReady = false;
 var items = [];
+let loadingDiv = document.getElementById('loading');
 
 
 function openConfirmModal(id, image, name) {
@@ -65,14 +68,14 @@ function confirmRedeem(id) {
 
         if (xhttp.readyState === XMLHttpRequest.DONE) {
             if (xhttp.status !== 200) {
-                document.getElementById('errorModal').style.display = 'block';
+                document.getElementById('errorModal').style.display = 'flex';
                 return;
             }
 
             const response = JSON.parse(xhttp.responseText);
 
             if (!(response && response.success)) {
-                document.getElementById('errorModal').style.display = 'block';
+                document.getElementById('errorModal').style.display = 'flex';
                 return;
             }
 
@@ -123,6 +126,7 @@ function buildItems() {
         let newItemsImage = document.createElement('img');
         newItemsImage.src = item.image;
         newItemsImage.style.width = "100%";
+        newItemsImage.title = item.name;
         newItemsImage.alt = 'item picture';
         // INSERT IMAGE IN IMAGE DIV
         newItemImageDiv.appendChild(newItemsImage);
@@ -164,7 +168,10 @@ function buildItems() {
             newNameButtonDiv.appendChild(newRedeemButton);
 
             newProgressBar.classList.add('progress-bar');
-            newProgressBar.style.width = percentage + "%";
+            setTimeout(() => {
+                newProgressBar.style.width = percentage + "%";
+            }, 200);
+
             newDescriptionDiv.appendChild(newProgressBar);
 
         } else {
@@ -173,7 +180,13 @@ function buildItems() {
 
 
             newCanRedeemButton.innerHTML = 'RESGATAR';
-            newCanRedeemButton.classList.add('can-reddem-button');
+            setTimeout(() => {
+                newCanRedeemButton.classList.add('can-redeem-button');
+                newCanRedeemButton.title = 'Resgatar Premiação'
+                newProgressBar.classList.remove('progress-bar');
+                newProgressBar.classList.add('can-redeem-progress-bar');
+            }, 1400);
+
             newCanRedeemButton.onclick = 'openConfirmModal()';
             newCanRedeemButton.addEventListener("click", () => {
                 openConfirmModal(newItems.id, newItemsImage.src, newItemName.innerHTML)
@@ -181,8 +194,9 @@ function buildItems() {
             newNameButtonDiv.appendChild(newCanRedeemButton);
 
             newProgressBar.classList.add('progress-bar');
-            newProgressBar.style.width = percentage + "%";
-            newProgressBar.classList.add('can-reddem-progress-bar');
+            setTimeout(() => {
+                newProgressBar.style.width = percentage + "%";
+            }, 100);
             newDescriptionDiv.appendChild(newProgressBar);
 
 
@@ -193,6 +207,8 @@ function buildItems() {
         newItems.appendChild(newDescriptionDiv);
 
     }
+
+    isReady = true;
 }
 
 function init() {
@@ -210,4 +226,19 @@ function init() {
     xhttp.send();
 }
 
+function removeLoadingWhenReady() {
+    if (!isReady) {
+        setTimeout(() => {
+            removeLoadingWhenReady()
+        }, 50);
+    } else {
+        let loadingDiv = document.getElementById('loading');
+        loadingDiv.remove();
+    }
+}
+
 init();
+removeLoadingWhenReady();
+
+let contentDiv = document.getElementById('contentDiv');
+contentDiv.style.display = 'flex';

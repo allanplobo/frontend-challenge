@@ -9,6 +9,29 @@ p {
     margin: 0;
 }
 
+@keyframes opacity-effect {
+    0% {
+        opacity: 0;
+    }
+}
+
+.loading {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    background-color: #FF6600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loading img {
+    width: 250px;
+    height: 250px;
+    animation-name: opacity-effect;
+    animation-duration: 1s;
+}
+
 .background {
     position: relative;
     background-image: url('../img/metin2-background.jpg');
@@ -32,6 +55,8 @@ p {
     align-items: center;
     padding: 24px 0px;
     margin: 24px;
+    animation-name: opacity-effect;
+    animation-duration: 1.5s;
 }
 
 div::-webkit-scrollbar {
@@ -107,14 +132,16 @@ div::-webkit-scrollbar-thumb {
     color: #d5d5d5;
 }
 
-.can-reddem-button {
+.can-redeem-button {
     color: #ec2c2c !important;
     border: 1px solid #ec2c2c !important;
     cursor: pointer;
     transition: 0.5s;
+    animation-name: can-redeem-animation;
+    animation-duration: 2s;
 }
 
-.can-reddem-button:hover {
+.can-redeem-button:hover {
     transition: 0.5s;
     box-shadow: 0 0 1em red;
 }
@@ -124,10 +151,28 @@ div::-webkit-scrollbar-thumb {
     margin-top: 10px;
     height: 30%;
     background-color: #462828;
+    transition: 1.5s width;
 }
 
-.can-reddem-progress-bar {
-    background-color: #ec2c2c !important;
+.can-redeem-progress-bar {
+    margin-top: 10px;
+    height: 30%;
+    background-color: #ec2c2c;
+    animation-name: can-redeem-animation;
+    animation-duration: 2s;
+}
+
+@keyframes can-redeem-animation {
+    0% {
+        background-color: #462828;
+    }
+    50% {
+        box-shadow: 0 0 1em #ec2c2c;
+    }
+    100% {
+        box-shadow: none;
+        background-color: #ec2c2c !important;
+    }
 }
 
 .modal {
@@ -135,6 +180,7 @@ div::-webkit-scrollbar-thumb {
     position: absolute;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     text-align: center;
     border-radius: 10px;
     width: 265px;
@@ -142,9 +188,12 @@ div::-webkit-scrollbar-thumb {
     background-color: #313131;
     color: white;
     padding: 12px;
+    animation-name: opacity-effect;
+    animation-duration: 1s;
 }
 
 .modal h1 {
+    margin: 8px;
     color: #ec5353;
     text-shadow: 0 0 0.2em black;
 }
@@ -186,7 +235,8 @@ div::-webkit-scrollbar-thumb {
 }
 
 .modal .ok-modal-button {
-    width: 50px;
+    margin-top: 15px;
+    width: 55px;
     height: 30px;
     cursor: pointer;
 }

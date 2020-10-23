@@ -16,9 +16,11 @@
     <div id="darkBackground" class="dark-background" style="display: none;"></div>
     <section class="background">
 
-        <div class="content">
+        <div id="loading" class="loading">
+            <img src="./assets/img/logo-ongame.svg" alt="logo" title="OnGame"></div>
+        <div id="contentDiv" class="content" style="display: none;">
 
-            <img src="./assets/img/metin2-logo.png" alt="Logo" class="logo">
+            <img src="./assets/img/metin2-logo.png" alt="Logo" title="Metin2" class="logo">
             <h3>Resgate sua premiação!</h3>
 
             <div id="rewardsDiv" class="rewards">
@@ -31,14 +33,14 @@
         </div>
 
         <div id="errorModal" class="modal" style="display: none;">
-            <h1 style="margin-top: 40px;">Ocorreu um erro!
-                <br>Por favor, tente novamente.</h1>
-            <button id="okErrorButton" class="ok-modal-button" onclick=confirmError()>OK</button>
+            <h1>OCORREU UM ERRO! </h1>
+            <p>Por favor, tente novamente</p>
+            <button id="okErrorButton " class="ok-modal-button " onclick=confirmError()>OK</button>
         </div>
 
     </section>
 
-    <script src="./assets/js/index.js"></script>
+    <script src="./assets/js/index.js "></script>
 
 </body>
 
